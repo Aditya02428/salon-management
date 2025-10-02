@@ -1,13 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { useAuth } from '../context/AuthContext';
 import { toast } from 'react-toastify';
-import { FaPlus, FaEdit, FaTrash, FaEye, FaCalendarAlt, FaUser, FaDollarSign, FaClock } from 'react-icons/fa';
-import axios from 'axios';
+import { FaPlus, FaEdit, FaTrash, FaEye, FaCalendarAlt } from 'react-icons/fa';
+import api from '../utils/api';
 import moment from 'moment';
 import './AdminPanel.css';
 
 const AdminPanel = () => {
-  const { user, isAdmin } = useAuth();
+  const { isAdmin } = useAuth();
   const [activeTab, setActiveTab] = useState('bookings');
   const [bookings, setBookings] = useState([]);
   const [services, setServices] = useState([]);
@@ -34,8 +34,8 @@ const AdminPanel = () => {
   const fetchData = async () => {
     try {
       const [bookingsRes, servicesRes] = await Promise.all([
-        axios.get('/api/bookings/admin/all'),
-        axios.get('/api/services')
+        api.get('/api/bookings/admin/all'),
+        api.get('/api/services')
       ]);
       setBookings(bookingsRes.data.bookings || []);
       setServices(servicesRes.data);
@@ -52,10 +52,10 @@ const AdminPanel = () => {
     
     try {
       if (editingService) {
-        await axios.put(`/api/services/${editingService._id}`, serviceForm);
+        await api.put(`/api/services/${editingService._id}`, serviceForm);
         toast.success('Service updated successfully!');
       } else {
-        await axios.post('/api/services', serviceForm);
+        await api.post('/api/services', serviceForm);
         toast.success('Service created successfully!');
       }
       
@@ -92,7 +92,7 @@ const AdminPanel = () => {
   const handleDeleteService = async (serviceId) => {
     if (window.confirm('Are you sure you want to delete this service?')) {
       try {
-        await axios.delete(`/api/services/${serviceId}`);
+        await api.delete(`/api/services/${serviceId}`);
         toast.success('Service deleted successfully!');
         fetchData();
       } catch (error) {
@@ -104,7 +104,7 @@ const AdminPanel = () => {
 
   const updateBookingStatus = async (bookingId, status) => {
     try {
-      const response = await axios.put(`/api/bookings/${bookingId}/status`, { status });
+      await api.put(`/api/bookings/${bookingId}/status`, { status });
       toast.success('Booking status updated successfully!');
       fetchData(); // Refresh the data
     } catch (error) {

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { FaClock, FaDollarSign, FaArrowRight, FaFilter } from 'react-icons/fa';
-import axios from 'axios';
+import api from '../utils/api';
 import './Services.css';
 
 const Services = () => {
@@ -22,7 +22,7 @@ const Services = () => {
 
   const fetchServices = async () => {
     try {
-      const response = await axios.get('/api/services');
+      const response = await api.get('/api/services');
       setServices(response.data);
     } catch (error) {
       console.error('Error fetching services:', error);

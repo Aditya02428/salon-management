@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useAuth } from '../context/AuthContext';
 import { toast } from 'react-toastify';
 import { FaUser, FaEnvelope, FaPhone, FaSave, FaLock } from 'react-icons/fa';
-import axios from 'axios';
+import api from '../utils/api';
 import './Profile.css';
 
 const Profile = () => {
@@ -49,7 +49,7 @@ const Profile = () => {
     setLoading(true);
 
     try {
-      const response = await axios.put('/api/users/profile', formData);
+      const response = await api.put('/api/users/profile', formData);
       updateUser(response.data);
       toast.success('Profile updated successfully!');
     } catch (error) {
@@ -76,7 +76,7 @@ const Profile = () => {
     setPasswordLoading(true);
 
     try {
-      await axios.put('/api/users/change-password', {
+      await api.put('/api/users/change-password', {
         currentPassword: passwordData.currentPassword,
         newPassword: passwordData.newPassword
       });

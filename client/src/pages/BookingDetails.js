@@ -3,7 +3,7 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { toast } from 'react-toastify';
 import { FaCalendarAlt, FaClock, FaDollarSign, FaUser, FaPhone, FaEnvelope, FaArrowLeft, FaTimes } from 'react-icons/fa';
-import axios from 'axios';
+import api from '../utils/api';
 import moment from 'moment';
 import './BookingDetails.css';
 
@@ -20,7 +20,7 @@ const BookingDetails = () => {
 
   const fetchBookingDetails = async () => {
     try {
-      const response = await axios.get(`/api/bookings/${id}`);
+      const response = await api.get(`/api/bookings/${id}`);
       setBooking(response.data);
     } catch (error) {
       console.error('Error fetching booking details:', error);
@@ -34,7 +34,7 @@ const BookingDetails = () => {
   const handleCancelBooking = async () => {
     if (window.confirm('Are you sure you want to cancel this booking?')) {
       try {
-        await axios.put(`/api/bookings/${id}/cancel`);
+        await api.put(`/api/bookings/${id}/cancel`);
         toast.success('Booking cancelled successfully');
         fetchBookingDetails(); // Refresh booking details
       } catch (error) {

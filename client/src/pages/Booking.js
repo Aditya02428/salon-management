@@ -5,7 +5,7 @@ import { toast } from 'react-toastify';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import { FaCalendarAlt, FaClock, FaUser, FaDollarSign, FaArrowLeft } from 'react-icons/fa';
-import axios from 'axios';
+import api from '../utils/api';
 import './Booking.css';
 
 const Booking = () => {
@@ -40,7 +40,7 @@ const Booking = () => {
 
   const fetchServices = async () => {
     try {
-      const response = await axios.get('/api/services');
+      const response = await api.get('/api/services');
       setServices(response.data);
     } catch (error) {
       console.error('Error fetching services:', error);
@@ -53,7 +53,7 @@ const Booking = () => {
     
     setLoadingSlots(true);
     try {
-      const response = await axios.get('/api/bookings/available-slots', {
+      const response = await api.get('/api/bookings/available-slots', {
         params: {
           date: selectedDate.toISOString().split('T')[0],
           serviceId: selectedService
@@ -99,7 +99,7 @@ const Booking = () => {
 
     setLoading(true);
     try {
-      const response = await axios.post('/api/bookings', {
+      const response = await api.post('/api/bookings', {
         serviceId: selectedService,
         date: selectedDate.toISOString().split('T')[0],
         timeSlot: selectedSlot,
